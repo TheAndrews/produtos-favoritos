@@ -1,0 +1,235 @@
+definitions:
+  forms.CustomerForm:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+    required:
+    - email
+    - name
+    type: object
+  forms.WishlistForm:
+    properties:
+      productId:
+        minimum: 1
+        type: integer
+    required:
+    - productId
+    type: object
+  models.Customer:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+      wishlist:
+        items:
+          $ref: '#/definitions/models.Product'
+        type: array
+    type: object
+  models.Product:
+    properties:
+      category:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      price:
+        type: number
+      title:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Manage Customers, Whislist
+  title: Ecommerce management Api
+  version: "1.0"
+paths:
+  /api/v1/customers:
+    get:
+      description: Get all customers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Customer'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: List customers
+      tags:
+      - customers
+    post:
+      description: Create a customer
+      parameters:
+      - description: CustomerForm form
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/forms.CustomerForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: ""
+      security:
+      - ApiKeyAuth: []
+      summary: Create a customer
+      tags:
+      - customers
+  /api/v1/customers/{id}:
+    delete:
+      description: Removes a customer
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: ""
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a customer
+      tags:
+      - customers
+    get:
+      description: Get a single customer by Id
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: ""
+      security:
+      - ApiKeyAuth: []
+      summary: Get Customer by Id
+      tags:
+      - customers
+    put:
+      description: Update a customer
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: CustomerForm form
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/forms.CustomerForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: ""
+      security:
+      - ApiKeyAuth: []
+      summary: Update a customer
+      tags:
+      - customers
+  /api/v1/customers/{id}/wishlist:
+    post:
+      description: Given a customer and a product add the product to the customer
+        wishlist
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: WishlistForm form
+        in: body
+        name: wishlist
+        required: true
+        schema:
+          $ref: '#/definitions/forms.WishlistForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: Add Product To Wishlist
+      tags:
+      - wishlist
+  /api/v1/customers/{id}/wishlist/{product_id}:
+    delete:
+      description: Given a customer and a product remove the product from the wishlist
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Product ID
+        in: path
+        name: product_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: Remove Product From Wishlist
+      tags:
+      - wishlist
+  /api/v1/products:
+    get:
+      description: Get all products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: List products
+      tags:
+      - products
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: x-api-key
+    type: apiKey
+swagger: "2.0"
