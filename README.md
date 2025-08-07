@@ -7,7 +7,7 @@ $ swag init --dir ./src --output ./src/api/docs
 
 $ go install github.com/go-delve/delve/cmd/dlv@latest
 
-# Add mockery generation
+# add mockery generation
 
 $ go install github.com/vektra/mockery/v2@latest
 $ mockery --all --output=./src/internals/mocks
