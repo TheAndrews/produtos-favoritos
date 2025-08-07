@@ -3,7 +3,7 @@ package services
 import (
 	querier "produtos-favoritos/src/domain/interfaces/repositories"
 	servicers "produtos-favoritos/src/domain/interfaces/services"
-	"produtos-favoritos/src/internal/exceptions"
+	"produtos-favoritos/src/internals/exceptions"
 )
 
 type WishlistService struct {

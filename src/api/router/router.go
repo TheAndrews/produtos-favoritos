@@ -13,7 +13,7 @@ import (
 func SetupRouter(router *gin.Engine,
 	customerController handlers.CustomerHandler,
 	productController handlers.ProductHandler,
-	wishlistContoller handlers.Wishlisthandler) {
+	wishlistContoller handlers.WishlistHandler) {
 	// Define routes
 	baseApiRoute := router.Group("api")
 	{

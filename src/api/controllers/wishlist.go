@@ -8,7 +8,7 @@ import (
 	"produtos-favoritos/src/api/forms"
 	handlers "produtos-favoritos/src/domain/interfaces/controllers"
 	servicers "produtos-favoritos/src/domain/interfaces/services"
-	"produtos-favoritos/src/internal/exceptions"
+	"produtos-favoritos/src/internals/exceptions"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,7 +17,7 @@ type WishlistController struct {
 	WishlistService servicers.WishlistServicer
 }
 
-func NewWishlistController(wishlistService servicers.WishlistServicer) handlers.Wishlisthandler {
+func NewWishlistController(wishlistService servicers.WishlistServicer) handlers.WishlistHandler {
 	return &WishlistController{WishlistService: wishlistService}
 }
 

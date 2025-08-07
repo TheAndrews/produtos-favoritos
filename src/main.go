@@ -11,6 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"gorm.io/gorm"
 )
 
 // @title Ecommerce Aiqfome Api
@@ -18,24 +19,27 @@ import (
 // @description Manage Customers, Whislist
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
-// @name x-api-key
-
+// @name X-Api-Key
 func main() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
-	// Run migrations
-	migrations.RunMigrations()
-
 	// Wire dependency injection
 	container := di.BuildContainer()
-
+	// Run migrations
+	// Run migrations using the *gorm.DB from the container
+	err = container.Invoke(func(db *gorm.DB) {
+		migrations.RunMigrations(db)
+	})
+	if err != nil {
+		log.Fatalf("failed to run migrations: %v", err)
+	}
 	err = container.Invoke(func(engine *gin.Engine,
 		customerHandler handlers.CustomerHandler,
 		productHandler handlers.ProductHandler,
-		wishlisthandler handlers.Wishlisthandler) {
+		wishlisthandler handlers.WishlistHandler) {
 		// Setup Gin router
 		router.SetupRouter(engine,
 			customerHandler,

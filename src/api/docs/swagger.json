@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "Manage Customers, Whislist",
-        "title": "Ecommerce management Api",
+        "title": "Ecommerce Aiqfome Api",
         "contact": {},
         "version": "1.0"
     },
@@ -364,7 +364,7 @@
     "securityDefinitions": {
         "ApiKeyAuth": {
             "type": "apiKey",
-            "name": "x-api-key",
+            "name": "X-Api-Key",
             "in": "header"
         }
     }

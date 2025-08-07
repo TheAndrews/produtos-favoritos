@@ -109,6 +109,24 @@ func (_m *CustomerQuerier) List() ([]models.Customer, error) {
 	return r0, r1
 }
 
+// RemoveProductFromWishlist provides a mock function with given fields: customerID, productID
+func (_m *CustomerQuerier) RemoveProductFromWishlist(customerID string, productID int32) error {
+	ret := _m.Called(customerID, productID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for RemoveProductFromWishlist")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(string, int32) error); ok {
+		r0 = rf(customerID, productID)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // Update provides a mock function with given fields: customer
 func (_m *CustomerQuerier) Update(customer *models.Customer) (*models.Customer, error) {
 	ret := _m.Called(customer)

@@ -13,6 +13,6 @@ func ProvideWishlistService(customerRepository querier.CustomerQuerier,
 	return services.NewWishlistService(customerRepository, productService)
 }
 
-func ProvideWishlisController(service servicers.WishlistServicer) handlers.Wishlisthandler {
+func ProvideWishlisController(service servicers.WishlistServicer) handlers.WishlistHandler {
 	return controllers.NewWishlistController(service)
 }

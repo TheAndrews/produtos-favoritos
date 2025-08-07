@@ -2,7 +2,7 @@ package controllers
 
 import "github.com/gin-gonic/gin"
 
-type Wishlisthandler interface {
+type WishlistHandler interface {
 	WishlistProduct(c *gin.Context)
 	RemoveFromWishlist(c *gin.Context)
 }

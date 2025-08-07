@@ -52,7 +52,7 @@ definitions:
 info:
   contact: {}
   description: Manage Customers, Whislist
-  title: Ecommerce management Api
+  title: Ecommerce Aiqfome Api
   version: "1.0"
 paths:
   /api/v1/customers:
@@ -230,6 +230,6 @@ paths:
 securityDefinitions:
   ApiKeyAuth:
     in: header
-    name: x-api-key
+    name: X-Api-Key
     type: apiKey
 swagger: "2.0"

@@ -372,7 +372,7 @@ const docTemplate = `{
     "securityDefinitions": {
         "ApiKeyAuth": {
             "type": "apiKey",
-            "name": "x-api-key",
+            "name": "X-Api-Key",
             "in": "header"
         }
     }
@@ -384,7 +384,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Ecommerce management Api",
+	Title:            "Ecommerce Aiqfome Api",
 	Description:      "Manage Customers, Whislist",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
