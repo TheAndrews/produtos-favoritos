@@ -2,13 +2,13 @@
 
 Api feita em Go utilizando banco de dados postgres
 
-Esse projeto se utiliza dos conceitos do ddd e solid.
-Existe uma autenticação simples checando api key no header (X-Api-Key)
-Os testes estão presente junto as suas implementações (padrão go), e fazem uso de mocks auto gerados a partir de interfaces. (pacote mockery)
-Nos repositórios os testes são de integração com o banco de dados tomando proveito do pacote (testcontainers-go) que sobe um container e o destroy para os testes.
+Esse projeto se utiliza dos conceitos do ddd e solid.<br>
+Existe uma autenticação simples checando api key no header (X-Api-Key).<br>
+Os testes estão presente junto as suas implementações (padrão go), e fazem uso de mocks auto gerados a partir de interfaces. (pacote mockery)<br>
+Nos repositórios os testes são de integração com o banco de dados tomando proveito do pacote (testcontainers-go) que sobe um container e o destroy para os testes.<br>
 
-Versão do go 1.24
-Pacotes mais importantes utilizados
+Versão do go 1.24 <br>
+Pacotes mais importantes utilizados <br>
 
 - gin
 - gin-swagger
@@ -42,16 +42,18 @@ A estrutura do projeto consiste em:
 
 # Rodando a aplição manualmente
 
-go mod tidy
+go mod tidy <br>
 go run .\src\main.go
 
-# Url do swagger
-
-http://localhost:8080/docs/index.html
+# Rodando a aplicação no Docker Compose
 
 Para rodar com docker é possível via o docker-compose onde ele sobe um container para a aplicação go e seu banco de dados postgres
 
 docker-compose up --build
+
+# Url do swagger
+
+http://localhost:8080/docs/index.html
 
 # Instalação do pacote do swagger
 
