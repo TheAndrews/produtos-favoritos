@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	interfaces "produtos-favoritos/src/domain/interfaces/repositories"
 	"produtos-favoritos/src/domain/models"
 
@@ -22,7 +23,21 @@ func (r *CustomerRepository) Create(customer *models.Customer) error {
 func (r *CustomerRepository) GetByID(id string) (*models.Customer, error) {
 	var customer models.Customer
 	if err := r.db.Preload("Wishlist").First(&customer, "id = ?", id).Error; err != nil {
-		return nil, err
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// No record found → return nil customer, nil error
+			return nil, nil
+		}
+	}
+	return &customer, nil
+}
+
+func (r *CustomerRepository) GetByEmail(email string) (*models.Customer, error) {
+	var customer models.Customer
+	if err := r.db.Preload("Wishlist").First(&customer, "email = ?", email).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// No record found → return nil customer, nil error
+			return nil, nil
+		}
 	}
 	return &customer, nil
 }

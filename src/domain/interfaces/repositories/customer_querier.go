@@ -11,4 +11,5 @@ type CustomerQuerier interface {
 	Delete(id string) error
 	List() ([]models.Customer, error)
 	RemoveProductFromWishlist(customerID string, productID int32) error
+	GetByEmail(email string) (*models.Customer, error)
 }

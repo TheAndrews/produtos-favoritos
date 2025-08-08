@@ -11,6 +11,7 @@ import (
 	"produtos-favoritos/src/internals/exceptions"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type WishlistController struct {
@@ -33,7 +34,10 @@ func NewWishlistController(wishlistService servicers.WishlistServicer) handlers.
 // @Router       /api/v1/customers/{id}/wishlist [post]
 func (wc *WishlistController) WishlistProduct(c *gin.Context) {
 	customerID := c.Param("id")
-
+	if _, err := uuid.Parse(customerID); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid customer ID"})
+		return
+	}
 	var form forms.WishlistForm
 	if err := c.ShouldBindJSON(&form); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -72,6 +76,10 @@ func (wc *WishlistController) WishlistProduct(c *gin.Context) {
 // @Router       /api/v1/customers/{id}/wishlist/{product_id} [delete]
 func (wc *WishlistController) RemoveFromWishlist(c *gin.Context) {
 	customerID := c.Param("id")
+	if _, err := uuid.Parse(customerID); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid customer ID"})
+		return
+	}
 	productIDParam := c.Param("product_id")
 
 	productID, err := strconv.Atoi(productIDParam)

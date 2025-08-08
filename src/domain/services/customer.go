@@ -7,6 +7,7 @@ import (
 	"produtos-favoritos/src/domain/interfaces/repositories"
 	"produtos-favoritos/src/domain/interfaces/services"
 	"produtos-favoritos/src/domain/models"
+	"produtos-favoritos/src/internals/exceptions"
 )
 
 type CustomerService struct {
@@ -21,7 +22,16 @@ func NewCustomerService(querier repositories.CustomerQuerier) services.CustomerS
 }
 
 func (s *CustomerService) CreateCustomer(customer *models.Customer) error {
-	// Add business logic here if needed (e.g., validation)
+	existingCustomer, err := s.repository.GetByEmail(customer.Email)
+	if err != nil {
+		return err
+	}
+	if existingCustomer != nil {
+		return &exceptions.EmailAlreadyRegisteredErr{
+			Reason: "this email is already registered",
+		}
+	}
+
 	return s.repository.Create(customer)
 }
 
@@ -33,6 +43,16 @@ func (s *CustomerService) UpdateCustomer(id string, updatedCustomer *models.Cust
 	existingCustomer, err := s.GetCustomerByID(id)
 	if err != nil {
 		return nil, fmt.Errorf("customer not found: %w", err)
+	}
+
+	existingCustomerWithEmail, err := s.repository.GetByEmail(updatedCustomer.Email)
+	if err != nil {
+		return nil, err
+	}
+	if existingCustomerWithEmail != nil && updatedCustomer.Email != existingCustomer.Email {
+		return nil, &exceptions.EmailAlreadyRegisteredErr{
+			Reason: "this email is already registered",
+		}
 	}
 
 	existingCustomer.Name = updatedCustomer.Name

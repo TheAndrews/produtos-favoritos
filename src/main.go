@@ -7,6 +7,7 @@ import (
 	di "produtos-favoritos/src/api/container"
 	"produtos-favoritos/src/api/router"
 	handlers "produtos-favoritos/src/domain/interfaces/controllers"
+	"produtos-favoritos/src/infrastructure/config"
 	"produtos-favoritos/src/infrastructure/database/migrations"
 
 	"github.com/gin-gonic/gin"
@@ -47,8 +48,8 @@ func main() {
 			wishlisthandler)
 
 		// run server
-		fmt.Println("Server running at http://localhost:8080")
-		if err := engine.Run(":8080"); err != nil {
+		fmt.Printf("Server running at http://localhost:%s", config.APP_PORT)
+		if err := engine.Run(fmt.Sprintf(":%s", config.APP_PORT)); err != nil {
 			log.Fatalf("could not start server: %v", err)
 		}
 	})

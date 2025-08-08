@@ -22,6 +22,7 @@ func TestCreateCustomer_Success(t *testing.T) {
 	}
 
 	mockRepo.On("Create", customer).Return(nil)
+	mockRepo.On("GetByEmail", customer.Email).Return(nil, nil)
 
 	service := NewCustomerService(mockRepo)
 	err := service.CreateCustomer(customer)
@@ -80,6 +81,7 @@ func TestUpdateCustomer_Success(t *testing.T) {
 	}
 
 	mockRepo.On("GetByID", customerID).Return(existingCustomer, nil)
+	mockRepo.On("GetByEmail", updatedCustomer.Email).Return(nil, nil)
 	// Update returns updated customer and nil error
 	mockRepo.On("Update", mock.AnythingOfType("*models.Customer")).
 		Return(existingCustomer, nil).

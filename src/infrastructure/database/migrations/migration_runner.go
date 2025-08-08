@@ -7,14 +7,12 @@ import (
 	"gorm.io/gorm"
 )
 
-var files = []*gormigrate.Migration{&migration202508050602,
-	&migration202508060345}
+var files = []*gormigrate.Migration{
+	&migration202508050602,
+	&migration202508060345,
+	&migration202508060560}
 
 func RunMigrations(db *gorm.DB) {
-	// Setup DB
-	// db := &gorm.Database{}
-	// dbInstance := db.GetInstance()
-
 	m := gormigrate.New(db, gormigrate.DefaultOptions, files)
 	if err := m.Migrate(); err != nil {
 		log.Fatalf("Could not migrate: %v", err)

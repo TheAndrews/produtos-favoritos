@@ -1,13 +1,16 @@
 package controllers
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 
 	"produtos-favoritos/src/api/forms"
 	handlers "produtos-favoritos/src/domain/interfaces/controllers"
 	"produtos-favoritos/src/domain/interfaces/services"
+	"produtos-favoritos/src/internals/exceptions"
 )
 
 type CustomerController struct {
@@ -46,6 +49,10 @@ func (cc *CustomerController) List(c *gin.Context) {
 // @Router       /api/v1/customers/{id} [get]
 func (cc *CustomerController) GetByID(c *gin.Context) {
 	id := c.Param("id")
+	if _, err := uuid.Parse(id); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid customer ID"})
+		return
+	}
 	customer, err := cc.CustomerService.GetCustomerByID(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -77,6 +84,11 @@ func (cc *CustomerController) Create(c *gin.Context) {
 	newCustomer := form.ToModel()
 	err := cc.CustomerService.CreateCustomer(newCustomer)
 	if err != nil {
+		var emailAlreadyRegisteredErr *exceptions.EmailAlreadyRegisteredErr
+		if errors.As(err, &emailAlreadyRegisteredErr) {
+			c.JSON(http.StatusUnprocessableEntity, gin.H{"error": emailAlreadyRegisteredErr.Error()})
+			return
+		}
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -94,6 +106,10 @@ func (cc *CustomerController) Create(c *gin.Context) {
 // @Router       /api/v1/customers/{id} [delete]
 func (cc *CustomerController) Delete(c *gin.Context) {
 	id := c.Param("id")
+	if _, err := uuid.Parse(id); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid customer ID"})
+		return
+	}
 	err := cc.CustomerService.DeleteCustomer(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not delete customer"})
@@ -115,14 +131,10 @@ func (cc *CustomerController) Delete(c *gin.Context) {
 // @Router       /api/v1/customers/{id} [put]
 func (cc *CustomerController) Update(c *gin.Context) {
 	id := c.Param("id")
-
-	// parsedID, err := uuid.Parse(id)
-	// if err != nil {
-	// 	// Handle invalid UUID string
-	// 	log.Println("Invalid UUID:", err)
-	// 	return
-	// }
-
+	if _, err := uuid.Parse(id); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid customer ID"})
+		return
+	}
 	var form forms.CustomerForm
 	if err := c.ShouldBindJSON(&form); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -133,6 +145,11 @@ func (cc *CustomerController) Update(c *gin.Context) {
 
 	updatedCustomer, err := cc.CustomerService.UpdateCustomer(id, customerToUpdate)
 	if err != nil {
+		var emailAlreadyRegisteredErr *exceptions.EmailAlreadyRegisteredErr
+		if errors.As(err, &emailAlreadyRegisteredErr) {
+			c.JSON(http.StatusUnprocessableEntity, gin.H{"error": emailAlreadyRegisteredErr.Error()})
+			return
+		}
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not update customer"})
 		return
 	}
