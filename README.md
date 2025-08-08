@@ -42,8 +42,8 @@ A estrutura do projeto consiste em:
 
 # Rodando a aplição manualmente
 
-$ go mod tidy
-$ go run .\src\main.go
+go mod tidy
+go run .\src\main.go
 
 # Url do swagger
 
@@ -51,23 +51,23 @@ http://localhost:8080/docs/index.html
 
 Para rodar com docker é possível via o docker-compose onde ele sobe um container para a aplicação go e seu banco de dados postgres
 
-$ docker-compose up --build
+docker-compose up --build
 
 # Instalação do pacote do swagger
 
-$ go install github.com/swaggo/swag/cmd/swag@latest
-$ go get -u github.com/swaggo/gin-swagger
-$ go get -u github.com/swaggo/files
-$ swag init --dir ./src --output ./src/api/docs
+go install github.com/swaggo/swag/cmd/swag@latest
+go get -u github.com/swaggo/gin-swagger
+go get -u github.com/swaggo/files
+swag init --dir ./src --output ./src/api/docs
 
 # Pacote para gerar mocks apartir de interfaces
 
-$ go install github.com/vektra/mockery/v2@latest
-$ mockery --all --output=./src/internals/mocks
+go install github.com/vektra/mockery/v2@latest
+mockery --all --output=./src/internals/mocks
 
 # Pacote que ajuda a debugar localmente
 
-$ go install github.com/go-delve/delve/cmd/dlv@latest
+go install github.com/go-delve/delve/cmd/dlv@latest
 
 link para video de utilizacao da api via swagger:
 https://vimeo.com/1108470413
