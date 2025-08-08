@@ -62,7 +62,7 @@ go get -u github.com/swaggo/gin-swagger
 go get -u github.com/swaggo/files
 swag init --dir ./src --output ./src/api/docs
 
-# Pacote para gerar mocks apartir de interfaces
+# Pacote para gerar mocks a partir de interfaces
 
 go install github.com/vektra/mockery/v2@latest
 mockery --all --output=./src/internals/mocks
