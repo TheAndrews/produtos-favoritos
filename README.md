@@ -68,3 +68,6 @@ $ mockery --all --output=./src/internals/mocks
 # Pacote que ajuda a debugar localmente
 
 $ go install github.com/go-delve/delve/cmd/dlv@latest
+
+link para video de utilizacao da api via swagger:
+https://vimeo.com/1108470413

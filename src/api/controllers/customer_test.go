@@ -93,9 +93,9 @@ func TestCustomerController_List_Error(t *testing.T) {
 func TestCustomerController_GetByID_Success(t *testing.T) {
 	r, mockService := setupTestRouter(t)
 
-	mockService.On("GetCustomerByID", "1").Return(&mockCustomers[0], nil)
+	mockService.On("GetCustomerByID", "00000000-0000-0000-0000-000000000000").Return(&mockCustomers[0], nil)
 
-	req, _ := http.NewRequest(http.MethodGet, "/api/v1/customers/1", nil)
+	req, _ := http.NewRequest(http.MethodGet, "/api/v1/customers/00000000-0000-0000-0000-000000000000", nil)
 	req.Header.Set("X-Api-Key", config.API_KEY)
 	resp := httptest.NewRecorder()
 	r.ServeHTTP(resp, req)
@@ -111,9 +111,9 @@ func TestCustomerController_GetByID_Success(t *testing.T) {
 func TestCustomerController_GetByID_NotFound(t *testing.T) {
 	r, mockService := setupTestRouter(t)
 
-	mockService.On("GetCustomerByID", "1").Return(nil, nil)
+	mockService.On("GetCustomerByID", "00000000-0000-0000-0000-000000000000").Return(nil, nil)
 
-	req, _ := http.NewRequest(http.MethodGet, "/api/v1/customers/1", nil)
+	req, _ := http.NewRequest(http.MethodGet, "/api/v1/customers/00000000-0000-0000-0000-000000000000", nil)
 	req.Header.Set("X-Api-Key", config.API_KEY)
 	resp := httptest.NewRecorder()
 	r.ServeHTTP(resp, req)
@@ -125,9 +125,9 @@ func TestCustomerController_GetByID_NotFound(t *testing.T) {
 func TestCustomerController_GetByID_Error(t *testing.T) {
 	r, mockService := setupTestRouter(t)
 
-	mockService.On("GetCustomerByID", "1").Return(nil, errors.New("db error"))
+	mockService.On("GetCustomerByID", "00000000-0000-0000-0000-000000000000").Return(nil, errors.New("db error"))
 
-	req, _ := http.NewRequest(http.MethodGet, "/api/v1/customers/1", nil)
+	req, _ := http.NewRequest(http.MethodGet, "/api/v1/customers/00000000-0000-0000-0000-000000000000", nil)
 	req.Header.Set("X-Api-Key", config.API_KEY)
 	resp := httptest.NewRecorder()
 	r.ServeHTTP(resp, req)
@@ -187,9 +187,9 @@ func TestCustomerController_Create_Error(t *testing.T) {
 func TestCustomerController_Delete_Success(t *testing.T) {
 	r, mockService := setupTestRouter(t)
 
-	mockService.On("DeleteCustomer", "1").Return(nil)
+	mockService.On("DeleteCustomer", "00000000-0000-0000-0000-000000000000").Return(nil)
 
-	req, _ := http.NewRequest(http.MethodDelete, "/api/v1/customers/1", nil)
+	req, _ := http.NewRequest(http.MethodDelete, "/api/v1/customers/00000000-0000-0000-0000-000000000000", nil)
 	req.Header.Set("X-Api-Key", config.API_KEY)
 	resp := httptest.NewRecorder()
 	r.ServeHTTP(resp, req)
@@ -201,9 +201,9 @@ func TestCustomerController_Delete_Success(t *testing.T) {
 func TestCustomerController_Delete_Error(t *testing.T) {
 	r, mockService := setupTestRouter(t)
 
-	mockService.On("DeleteCustomer", "1").Return(errors.New("db error"))
+	mockService.On("DeleteCustomer", "00000000-0000-0000-0000-000000000000").Return(errors.New("db error"))
 
-	req, _ := http.NewRequest(http.MethodDelete, "/api/v1/customers/1", nil)
+	req, _ := http.NewRequest(http.MethodDelete, "/api/v1/customers/00000000-0000-0000-0000-000000000000", nil)
 	req.Header.Set("X-Api-Key", config.API_KEY)
 	resp := httptest.NewRecorder()
 	r.ServeHTTP(resp, req)
@@ -218,9 +218,9 @@ func TestCustomerController_Update_Success(t *testing.T) {
 	form := forms.CustomerForm{Name: "Updated Name", Email: "updated@example.com"}
 	body, _ := json.Marshal(form)
 
-	mockService.On("UpdateCustomer", "1", mock.AnythingOfType("*models.Customer")).Return(&mockCustomers[0], nil)
+	mockService.On("UpdateCustomer", "00000000-0000-0000-0000-000000000000", mock.AnythingOfType("*models.Customer")).Return(&mockCustomers[0], nil)
 
-	req, _ := http.NewRequest(http.MethodPut, "/api/v1/customers/1", bytes.NewBuffer(body))
+	req, _ := http.NewRequest(http.MethodPut, "/api/v1/customers/00000000-0000-0000-0000-000000000000", bytes.NewBuffer(body))
 	req.Header.Set("X-Api-Key", config.API_KEY)
 	req.Header.Set("Content-Type", "application/json")
 	resp := httptest.NewRecorder()
@@ -248,9 +248,10 @@ func TestCustomerController_Update_Error(t *testing.T) {
 	form := forms.CustomerForm{Name: "Updated Name", Email: "updated@example.com"}
 	body, _ := json.Marshal(form)
 
-	mockService.On("UpdateCustomer", "1", mock.AnythingOfType("*models.Customer")).Return(nil, errors.New("update error"))
+	mockService.On("UpdateCustomer", "00000000-0000-0000-0000-000000000000",
+		mock.AnythingOfType("*models.Customer")).Return(nil, errors.New("update error"))
 
-	req, _ := http.NewRequest(http.MethodPut, "/api/v1/customers/1", bytes.NewBuffer(body))
+	req, _ := http.NewRequest(http.MethodPut, "/api/v1/customers/00000000-0000-0000-0000-000000000000", bytes.NewBuffer(body))
 	req.Header.Set("X-Api-Key", config.API_KEY)
 	req.Header.Set("Content-Type", "application/json")
 	resp := httptest.NewRecorder()

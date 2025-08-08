@@ -51,9 +51,10 @@ func TestWishlistController_WishlistProduct_Success(t *testing.T) {
 	form := forms.WishlistForm{ProductID: 123}
 	body, _ := json.Marshal(form)
 
-	mockService.On("WishlistProduct", int32(123), "1").Return(nil)
+	mockService.On("WishlistProduct", int32(123), "00000000-0000-0000-0000-000000000000").Return(nil)
 
-	req, _ := http.NewRequest(http.MethodPost, "/api/v1/customers/1/wishlist", bytes.NewBuffer(body))
+	req, _ := http.NewRequest(http.MethodPost, "/api/v1/customers/00000000-0000-0000-0000-000000000000/wishlist",
+		bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Api-Key", config.API_KEY)
 	resp := httptest.NewRecorder()
@@ -70,9 +71,11 @@ func TestWishlistController_WishlistProduct_AlreadyWishlisted(t *testing.T) {
 	form := forms.WishlistForm{ProductID: 123}
 	body, _ := json.Marshal(form)
 
-	mockService.On("WishlistProduct", int32(123), "1").Return(&exceptions.AlreadyWishlistedErr{Reason: "Already in wishlist"})
+	mockService.On("WishlistProduct", int32(123), "00000000-0000-0000-0000-000000000000").
+		Return(&exceptions.AlreadyWishlistedErr{Reason: "Already in wishlist"})
 
-	req, _ := http.NewRequest(http.MethodPost, "/api/v1/customers/1/wishlist", bytes.NewBuffer(body))
+	req, _ := http.NewRequest(http.MethodPost, "/api/v1/customers/00000000-0000-0000-0000-000000000000/wishlist",
+		bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Api-Key", config.API_KEY)
 	resp := httptest.NewRecorder()
@@ -89,9 +92,11 @@ func TestWishlistController_WishlistProduct_NotFound(t *testing.T) {
 	form := forms.WishlistForm{ProductID: 123}
 	body, _ := json.Marshal(form)
 
-	mockService.On("WishlistProduct", int32(123), "1").Return(&exceptions.NotFoundEntityError{Reason: "Not found"})
+	mockService.On("WishlistProduct", int32(123), "00000000-0000-0000-0000-000000000000").
+		Return(&exceptions.NotFoundEntityError{Reason: "Not found"})
 
-	req, _ := http.NewRequest(http.MethodPost, "/api/v1/customers/1/wishlist", bytes.NewBuffer(body))
+	req, _ := http.NewRequest(http.MethodPost, "/api/v1/customers/00000000-0000-0000-0000-000000000000/wishlist",
+		bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Api-Key", config.API_KEY)
 	resp := httptest.NewRecorder()
@@ -106,7 +111,8 @@ func TestWishlistController_WishlistProduct_BadRequest(t *testing.T) {
 	r, _ := setupWishlistTestRouter(t)
 
 	// Invalid JSON
-	req, _ := http.NewRequest(http.MethodPost, "/api/v1/customers/1/wishlist", bytes.NewBuffer([]byte(`invalid`)))
+	req, _ := http.NewRequest(http.MethodPost, "/api/v1/customers/00000000-0000-0000-0000-000000000000/wishlist",
+		bytes.NewBuffer([]byte(`invalid`)))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Api-Key", config.API_KEY)
 	resp := httptest.NewRecorder()
@@ -122,9 +128,11 @@ func TestWishlistController_WishlistProduct_InternalServerError(t *testing.T) {
 	form := forms.WishlistForm{ProductID: 123}
 	body, _ := json.Marshal(form)
 
-	mockService.On("WishlistProduct", int32(123), "1").Return(errors.New("something went wrong"))
+	mockService.On("WishlistProduct", int32(123), "00000000-0000-0000-0000-000000000000").
+		Return(errors.New("something went wrong"))
 
-	req, _ := http.NewRequest(http.MethodPost, "/api/v1/customers/1/wishlist", bytes.NewBuffer(body))
+	req, _ := http.NewRequest(http.MethodPost, "/api/v1/customers/00000000-0000-0000-0000-000000000000/wishlist",
+		bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Api-Key", config.API_KEY)
 	resp := httptest.NewRecorder()
@@ -142,9 +150,9 @@ func TestWishlistController_WishlistProduct_InternalServerError(t *testing.T) {
 func TestWishlistController_RemoveFromWishlist_Success(t *testing.T) {
 	r, mockService := setupWishlistTestRouter(t)
 
-	mockService.On("RemoveProductFromWishlist", "1", int32(123)).Return(nil)
+	mockService.On("RemoveProductFromWishlist", "00000000-0000-0000-0000-000000000000", int32(123)).Return(nil)
 
-	req, _ := http.NewRequest(http.MethodDelete, "/api/v1/customers/1/wishlist/123", nil)
+	req, _ := http.NewRequest(http.MethodDelete, "/api/v1/customers/00000000-0000-0000-0000-000000000000/wishlist/123", nil)
 	req.Header.Set("X-Api-Key", config.API_KEY)
 	resp := httptest.NewRecorder()
 
@@ -157,9 +165,10 @@ func TestWishlistController_RemoveFromWishlist_Success(t *testing.T) {
 func TestWishlistController_RemoveFromWishlist_NotFound(t *testing.T) {
 	r, mockService := setupWishlistTestRouter(t)
 
-	mockService.On("RemoveProductFromWishlist", "1", int32(123)).Return(&exceptions.NotFoundEntityError{Reason: "not found"})
+	mockService.On("RemoveProductFromWishlist", "00000000-0000-0000-0000-000000000000",
+		int32(123)).Return(&exceptions.NotFoundEntityError{Reason: "not found"})
 
-	req, _ := http.NewRequest(http.MethodDelete, "/api/v1/customers/1/wishlist/123", nil)
+	req, _ := http.NewRequest(http.MethodDelete, "/api/v1/customers/00000000-0000-0000-0000-000000000000/wishlist/123", nil)
 	req.Header.Set("X-Api-Key", config.API_KEY)
 	resp := httptest.NewRecorder()
 
@@ -172,7 +181,7 @@ func TestWishlistController_RemoveFromWishlist_NotFound(t *testing.T) {
 func TestWishlistController_RemoveFromWishlist_InvalidID(t *testing.T) {
 	r, _ := setupWishlistTestRouter(t)
 
-	req, _ := http.NewRequest(http.MethodDelete, "/api/v1/customers/1/wishlist/abc", nil)
+	req, _ := http.NewRequest(http.MethodDelete, "/api/v1/customers/100000000-0000-0000-0000-000000000000/wishlist/abc", nil)
 	req.Header.Set("X-Api-Key", config.API_KEY)
 	resp := httptest.NewRecorder()
 
@@ -184,9 +193,10 @@ func TestWishlistController_RemoveFromWishlist_InvalidID(t *testing.T) {
 func TestWishlistController_RemoveFromWishlist_InternalServerError(t *testing.T) {
 	r, mockService := setupWishlistTestRouter(t)
 
-	mockService.On("RemoveProductFromWishlist", "1", int32(123)).Return(errors.New("db down"))
+	mockService.On("RemoveProductFromWishlist", "00000000-0000-0000-0000-000000000000", int32(123)).
+		Return(errors.New("db down"))
 
-	req, _ := http.NewRequest(http.MethodDelete, "/api/v1/customers/1/wishlist/123", nil)
+	req, _ := http.NewRequest(http.MethodDelete, "/api/v1/customers/00000000-0000-0000-0000-000000000000/wishlist/123", nil)
 	req.Header.Set("X-Api-Key", config.API_KEY)
 	resp := httptest.NewRecorder()
 
