@@ -14,6 +14,7 @@ import (
 )
 
 type CustomerController struct {
+	BaseController
 	CustomerService services.CustomerServicer
 }
 
@@ -32,10 +33,10 @@ func NewCustomerController(service services.CustomerServicer) handlers.CustomerH
 func (cc *CustomerController) List(c *gin.Context) {
 	customers, err := cc.CustomerService.ListCustomers()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		cc.respondError(c, err)
 		return
 	}
-	c.JSON(http.StatusOK, customers)
+	cc.respond(c, customers)
 }
 
 // GetCustomerById godoc
@@ -62,7 +63,9 @@ func (cc *CustomerController) GetByID(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"message": "customer not found"})
 		return
 	}
-	c.JSON(http.StatusOK, customer)
+
+	cc.respond(c, customer)
+
 }
 
 // CreateCustomer godoc

@@ -15,6 +15,7 @@ import (
 )
 
 type WishlistController struct {
+	BaseController
 	WishlistService servicers.WishlistServicer
 }
 
@@ -35,33 +36,19 @@ func NewWishlistController(wishlistService servicers.WishlistServicer) handlers.
 func (wc *WishlistController) WishlistProduct(c *gin.Context) {
 	customerID := c.Param("id")
 	if _, err := uuid.Parse(customerID); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid customer ID"})
-		return
+		wc.respondError(c, &exceptions.BadRequestError{})
 	}
 	var form forms.WishlistForm
 	if err := c.ShouldBindJSON(&form); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+		wc.respondError(c, &exceptions.BadRequestError{})
 	}
 
 	err := wc.WishlistService.WishlistProduct(form.ProductID, customerID)
 	if err != nil {
-		var alreadyWishlistedErr *exceptions.AlreadyWishlistedErr
-		if errors.As(err, &alreadyWishlistedErr) {
-			c.JSON(http.StatusConflict, gin.H{"error": alreadyWishlistedErr.Error()})
-			return
-		}
-		var notFoundEntityError *exceptions.NotFoundEntityError
-		if errors.As(err, &notFoundEntityError) {
-			c.JSON(http.StatusNotFound, gin.H{"error": notFoundEntityError.Error()})
-			return
-		}
-
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add to wishlist"})
-		return
+		wc.respondError(c, err)
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Product added to wishlist"})
+	wc.respond(c, gin.H{"message": "Product added to wishlist"})
 }
 
 // RemoveFromWishlist godoc

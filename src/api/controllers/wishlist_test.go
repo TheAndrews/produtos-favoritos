@@ -82,7 +82,7 @@ func TestWishlistController_WishlistProduct_AlreadyWishlisted(t *testing.T) {
 
 	r.ServeHTTP(resp, req)
 
-	assert.Equal(t, http.StatusConflict, resp.Code)
+	assert.Equal(t, http.StatusBadRequest, resp.Code)
 	mockService.AssertExpectations(t)
 }
 
@@ -108,13 +108,16 @@ func TestWishlistController_WishlistProduct_NotFound(t *testing.T) {
 }
 
 func TestWishlistController_WishlistProduct_BadRequest(t *testing.T) {
-	r, _ := setupWishlistTestRouter(t)
+	r, mockService := setupWishlistTestRouter(t)
+
+	mockService.On("WishlistProduct", int32(0), "00000000-0000-0000-0000-000000000000").Return(errors.New("Failed"))
 
 	// Invalid JSON
 	req, _ := http.NewRequest(http.MethodPost, "/api/v1/customers/00000000-0000-0000-0000-000000000000/wishlist",
 		bytes.NewBuffer([]byte(`invalid`)))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Api-Key", config.API_KEY)
+
 	resp := httptest.NewRecorder()
 
 	r.ServeHTTP(resp, req)

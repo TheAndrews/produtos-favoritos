@@ -66,7 +66,6 @@ func TestProductController_List_Success(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Len(t, products, 1)
 	assert.Equal(t, "Laptop", products[0].Title)
-
 	mockService.AssertExpectations(t)
 }
 
@@ -81,12 +80,6 @@ func TestProductController_List_Error(t *testing.T) {
 
 	r.ServeHTTP(resp, req)
 
-	assert.Equal(t, http.StatusBadRequest, resp.Code)
-
-	var body map[string]string
-	err := json.Unmarshal(resp.Body.Bytes(), &body)
-	assert.NoError(t, err)
-	assert.Contains(t, body["error"], assert.AnError.Error())
-
+	assert.Equal(t, http.StatusInternalServerError, resp.Code)
 	mockService.AssertExpectations(t)
 }

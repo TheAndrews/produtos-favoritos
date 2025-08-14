@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"net/http"
 	handlers "produtos-favoritos/src/domain/interfaces/controllers"
 	servicers "produtos-favoritos/src/domain/interfaces/services"
 
@@ -9,6 +8,7 @@ import (
 )
 
 type ProductController struct {
+	BaseController
 	ProductService servicers.ProductServicer
 }
 
@@ -27,8 +27,8 @@ func NewProductController(productService servicers.ProductServicer) handlers.Pro
 func (pc *ProductController) List(c *gin.Context) {
 	customers, err := pc.ProductService.GetProducts()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		pc.respondError(c, err)
 		return
 	}
-	c.JSON(http.StatusOK, customers)
+	pc.respond(c, customers)
 }

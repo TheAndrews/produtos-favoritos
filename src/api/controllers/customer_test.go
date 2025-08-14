@@ -86,7 +86,7 @@ func TestCustomerController_List_Error(t *testing.T) {
 	resp := httptest.NewRecorder()
 	r.ServeHTTP(resp, req)
 
-	assert.Equal(t, http.StatusBadRequest, resp.Code)
+	assert.Equal(t, http.StatusInternalServerError, resp.Code)
 	mockService.AssertExpectations(t)
 }
 
