@@ -37,8 +37,9 @@ A estrutura do projeto consiste em:
     - database
       - migrations
       - repositorios
-  - internals - exceções - mocks
-    main
+  - internals
+    - exceções
+    - mocks <br>
 
 # Rodando a aplição manualmente
 
