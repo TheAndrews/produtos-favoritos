@@ -3,36 +3,29 @@ package services
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 	"produtos-favoritos/src/domain/interfaces/services"
 
 	"produtos-favoritos/src/domain/models"
 )
 
 type FakeProductApiClientService struct {
+	Products []byte
 }
 
-func NewFakeProductApiClientService() services.FakeProductApiClientServicer {
-	return &FakeProductApiClientService{}
+func NewFakeProductApiClientService(products []byte) services.FakeProductApiClientServicer {
+	return &FakeProductApiClientService{
+		Products: products,
+	}
 }
 
 func (fp *FakeProductApiClientService) ListProducts() ([]byte, error) {
-	body, err := os.ReadFile("src/internals/mocks/products.json")
-	if err != nil {
-		return nil, fmt.Errorf("failed to read products mock: %w", err)
-	}
 
-	return body, nil
+	return fp.Products, nil
 }
 
 func (fp *FakeProductApiClientService) GetProduct(productID int32) ([]byte, error) {
-	body, err := os.ReadFile("src/internals/mocks/products.json")
-	if err != nil {
-		return nil, fmt.Errorf("failed to read products mock: %w", err)
-	}
-
 	var products []models.Product
-	err = json.Unmarshal(body, &products)
+	err := json.Unmarshal(fp.Products, &products)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse products mock: %w", err)
 	}

@@ -1,6 +1,7 @@
 package services
 
 import (
+	"encoding/json"
 	"os"
 	"testing"
 
@@ -13,7 +14,7 @@ func TestListProducts_Success(t *testing.T) {
 		t.Fatalf("failed to read test fixture: %v", err)
 	}
 
-	service := NewFakeProductApiClientService()
+	service := NewFakeProductApiClientService(body)
 
 	result, err := service.ListProducts()
 
@@ -27,10 +28,16 @@ func TestGetProduct_Success(t *testing.T) {
 		t.Fatalf("failed to read test fixture: %v", err)
 	}
 
-	service := NewFakeProductApiClientService()
+	var products []json.RawMessage
+	err = json.Unmarshal(body, &products)
+	if err != nil {
+		t.Fatalf("failed to unmarshal test fixture: %v", err)
+	}
+
+	service := NewFakeProductApiClientService(body)
 
 	result, err := service.GetProduct(1)
 
 	assert.NoError(t, err)
-	assert.JSONEq(t, string(body), string(result))
+	assert.JSONEq(t, string(products[0]), string(result))
 }
