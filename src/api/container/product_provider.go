@@ -1,7 +1,6 @@
 package container
 
 import (
-	"net/http"
 	controllers "produtos-favoritos/src/api/controllers"
 	handlers "produtos-favoritos/src/domain/interfaces/controllers"
 	servicers "produtos-favoritos/src/domain/interfaces/services"
@@ -9,7 +8,7 @@ import (
 )
 
 func ProvideFakeApiClient() servicers.FakeProductApiClientServicer {
-	return services.NewFakeProductApiClientService(&http.Client{})
+	return services.NewFakeProductApiClientService()
 }
 
 func ProvideProductService(fakeApiClient servicers.FakeProductApiClientServicer) servicers.ProductServicer {

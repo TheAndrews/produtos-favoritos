@@ -384,7 +384,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Ecommerce Aiqfome Api",
+	Title:            "Mini Ecommerce Api",
 	Description:      "Manage Customers, Whislist",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

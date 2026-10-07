@@ -15,7 +15,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// @title Ecommerce Aiqfome Api
+// @title Mini Ecommerce Api
 // @version 1.0
 // @description Manage Customers, Whislist
 // @securityDefinitions.apikey ApiKeyAuth

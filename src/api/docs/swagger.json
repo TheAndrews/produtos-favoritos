@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "Manage Customers, Whislist",
-        "title": "Ecommerce Aiqfome Api",
+        "title": "Ecommerce Mini Ecommerce Api",
         "contact": {},
         "version": "1.0"
     },

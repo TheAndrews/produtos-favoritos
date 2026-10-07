@@ -1,51 +1,47 @@
 package services
 
 import (
+	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
+	"os"
 	"produtos-favoritos/src/domain/interfaces/services"
-	"produtos-favoritos/src/infrastructure/config"
+
+	"produtos-favoritos/src/domain/models"
 )
 
 type FakeProductApiClientService struct {
-	HTTP *http.Client
 }
 
-func NewFakeProductApiClientService(httpClient *http.Client) services.FakeProductApiClientServicer {
-	return &FakeProductApiClientService{
-		HTTP: httpClient,
-	}
+func NewFakeProductApiClientService() services.FakeProductApiClientServicer {
+	return &FakeProductApiClientService{}
 }
 
 func (fp *FakeProductApiClientService) ListProducts() ([]byte, error) {
-	listProductsUrl := fmt.Sprintf("%s%s", config.PRODUCTS_BASE_URL, "/products")
-	request, _ := http.NewRequest("GET", listProductsUrl, nil)
-	response, err := fp.HTTP.Do(request)
+	body, err := os.ReadFile("src/internals/mocks/products.json")
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to read products mock: %w", err)
 	}
 
-	body, err := io.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	return body, err
+	return body, nil
 }
 
 func (fp *FakeProductApiClientService) GetProduct(productID int32) ([]byte, error) {
-	getProductUrl := fmt.Sprintf("%s%s%d", config.PRODUCTS_BASE_URL, "/products/", productID)
-	request, _ := http.NewRequest("GET", getProductUrl, nil)
-	response, err := fp.HTTP.Do(request)
+	body, err := os.ReadFile("src/internals/mocks/products.json")
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to read products mock: %w", err)
 	}
 
-	body, err := io.ReadAll(response.Body)
+	var products []models.Product
+	err = json.Unmarshal(body, &products)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to parse products mock: %w", err)
 	}
 
-	return body, err
+	for _, product := range products {
+		if product.ID == productID {
+			return json.Marshal(product)
+		}
+	}
+
+	return nil, fmt.Errorf("product with ID %d not found", productID)
 }
