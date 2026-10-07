@@ -8,7 +8,7 @@ import (
 )
 
 func TestListProducts_Success(t *testing.T) {
-	body, err := os.ReadFile("../../infrastructure/mocks/products.json")
+	body, err := os.ReadFile("../../internals/mocks/products.json")
 	if err != nil {
 		t.Fatalf("failed to read test fixture: %v", err)
 	}
@@ -22,7 +22,7 @@ func TestListProducts_Success(t *testing.T) {
 }
 
 func TestGetProduct_Success(t *testing.T) {
-	body, err := os.ReadFile("../../infrastructure/mocks/products.json")
+	body, err := os.ReadFile("../../internals/mocks/products.json")
 	if err != nil {
 		t.Fatalf("failed to read test fixture: %v", err)
 	}
